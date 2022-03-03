@@ -13,7 +13,7 @@ public:
     void setNext(IntElement *elem) { next = elem; }
     void setValue(int value) { data = value; }
 
-private:
+//private:
     IntElement *next;
     int data;
 };
@@ -54,8 +54,95 @@ ListElement<int>* find(ListElement<int> *head, int data) {
     return elem;
 }
 
+bool deleteElement(IntElement **head, IntElement *deleteMe) {
+    IntElement *elem;
+
+    if (!head || !*head || !deleteMe) { // Check for null pointers.
+        return false;
+    }
+
+    elem = *head;
+    if (deleteMe == *head) { // Special case for head
+        (*head)->setNext(elem->getNext());
+        free(deleteMe);
+        return true;
+    }
+
+    while (elem) {
+        if (elem->getNext() == deleteMe) {
+            // elem is the element preceding deleteMe
+            elem->setNext(deleteMe->getNext());
+            free(deleteMe);
+            return true;
+        }
+        elem = elem->getNext();
+    }
+
+    // deleteMe not found.
+    return false;
+}
+
+bool deleteElement2(IntElement **npp, IntElement *deleteMe) {
+    if (!npp || !*npp || !deleteMe) { // Check for null pointers.
+        return false;
+    }
+
+    while (*npp) {
+        if (*npp == deleteMe) {
+            // npp points to head pointer (if deleteMe is the first element)
+            // or the next pointer within preceding element
+            *npp = deleteMe->next;
+            free(deleteMe);
+            return true;
+        }
+        npp = &((*npp)->next);
+    }
+
+    // deleteMe not found.
+    return false;
+}
+
+void deleteList(IntElement **head) {
+    IntElement *deleteMe = *head;
+    while (deleteMe) {
+        IntElement *next = deleteMe->getNext();
+        free(deleteMe);
+        deleteMe = next;
+    }
+
+    *head = NULL;
+}
+
+void display(IntElement* head) {
+    IntElement* elem = head;
+    while (elem) {
+        cout << elem->value() << endl;
+        elem = elem->getNext();
+    }
+}
+
 int main()
 {
-    cout << "Hello world!" << endl;
+    IntElement* ie1 = new IntElement(1);
+    IntElement* ie2 = new IntElement(2);
+    IntElement* ie3 = new IntElement(3);
+
+    ie1->setNext(ie2);
+    ie2->setNext(ie3);
+
+    cout << "Initial" << endl;
+    display(ie1);
+    cout << "\n";
+
+    cout << "Delete element" << endl;
+    deleteElement2(&ie1, ie2);
+    display(ie1);
+    cout << "\n";
+
+    cout << "Delete list" << endl;
+    deleteList(&ie1);
+    display(ie1);
+    cout << "\n";
+
     return 0;
 }
