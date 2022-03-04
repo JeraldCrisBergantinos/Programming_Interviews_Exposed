@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1646391787 source:d:\githubrepo\programming_interviews_exposed\programming_interviews_exposed\chapter 5\linkedlistproblems_c\main.c
+	<stdio.h>
+	<stdlib.h>
+	<stdbool.h>
+
